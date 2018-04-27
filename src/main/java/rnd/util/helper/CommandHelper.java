@@ -7,25 +7,27 @@ import java.io.InputStreamReader;
 
 public class CommandHelper {
 
-    public static void execCmd(String cmd) throws Exception {
-
+    public static String execCmd(String cmd) throws Exception {
         Process p = Runtime.getRuntime().exec(cmd);
-        printIS(p.getInputStream());
-        printIS(p.getErrorStream());
+        return readIS(p.getInputStream()) + readIS(p.getErrorStream());
     }
 
-    public static void printIS(InputStream is) throws Exception {
+    public static String readIS(InputStream is) throws Exception {
         
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line = "";
+        StringBuilder result = new StringBuilder();
         while ((line = br.readLine()) != null) {
-            System.out.println(line);
+            result.append(line).append("\n");
         }
+        
+        return result.toString();
 
     }
     
     public static void main(String[] args) throws Exception {
-        execCmd("ls -ltr");
+        String result = execCmd("ls -ltr");
+        System.out.print(result);
     }
 
 }
